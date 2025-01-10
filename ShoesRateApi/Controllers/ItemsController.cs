@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShoesRateApi.Models.Items.CreateItem;
+using ShoesRateApi.Models.Items.GetItemDetails;
 using ShoesRateApi.Models.Items.GetItemList;
 using ShoesRateApi.Services.Interfaces;
 
@@ -11,6 +12,7 @@ namespace ShoesRateApi.Controllers;
 public class ItemsController(IItemService itemService) : ControllerBase
 {
 	[Authorize]
+	[ProducesResponseType(typeof(CreateItemResponse), 200)]
 	[HttpPost]
 	public async Task<IActionResult> CreateItem([FromBody] CreateItemRequest request)
 	{
@@ -25,12 +27,14 @@ public class ItemsController(IItemService itemService) : ControllerBase
 	}
 	
 	[HttpGet]
+	[ProducesResponseType(typeof(GetItemListResponse), 200)]
 	public async Task<IActionResult> GetItemList([FromQuery] GetItemListRequest request)
 	{
 		return (await itemService.GetItemList(request)).ToActionResult();
 	}
 	
 	[HttpGet("{itemId:guid}")]
+	[ProducesResponseType(typeof(GetItemDetailsResponse), 200)]
 	public async Task<IActionResult> GetItemDetails([FromRoute] Guid itemId)
 	{
 		return (await itemService.GetItemDetails(itemId)).ToActionResult();

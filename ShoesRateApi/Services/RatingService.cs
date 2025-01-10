@@ -83,7 +83,7 @@ public class RatingService(RatingsDbContext dbContext,
 			.Ratings
 			.Where(x => x.ItemId == itemId)
 			.Include(x => x.User)
-			.Select(x => new GetRatingListResponse.Item(x.User.Username, x.Rate))
+			.Select(x => new GetRatingListResponse.RatingItem(x.User.Username, x.Rate))
 			.ToListAsync();
 		return Result.Success(new GetRatingListResponse
 		{
