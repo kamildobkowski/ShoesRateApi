@@ -78,6 +78,16 @@ builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddOptions<AuthenticationConfiguration>()
 	.Bind(builder.Configuration.GetRequiredSection("Authentication"));
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("Frontend", b =>
+	{
+		b.WithOrigins("http://localhost:7288")
+			.AllowAnyHeader()
+			.AllowAnyMethod()
+			.WithExposedHeaders("Location");
+	});
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -93,5 +103,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseCors("Frontend");
 
 app.Run();
